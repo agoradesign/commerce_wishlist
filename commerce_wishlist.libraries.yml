@@ -1,0 +1,18 @@
+form:
+  version: VERSION
+  css:
+    layout:
+      css/commerce_wishlist.module.css: {}
+
+wishlist_block:
+  version: VERSION
+  css:
+    layout:
+      css/commerce_wishlist.layout.css: {}
+    theme:
+      css/commerce_wishlist.theme.css: {}
+  js:
+    js/commerce_wishlist.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupal
