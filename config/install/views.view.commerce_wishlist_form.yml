@@ -250,7 +250,7 @@ display:
           relationship: wishlist_items
           group_type: group
           admin_label: ''
-          label: Remove
+          label: 'Move to cart'
           exclude: false
           alter:
             alter_text: false

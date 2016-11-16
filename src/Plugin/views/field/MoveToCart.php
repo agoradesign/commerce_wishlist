@@ -142,7 +142,7 @@ class MoveToCart extends FieldPluginBase {
         '#type' => 'submit',
         '#value' => t('Move to cart'),
         '#name' => 'move-wishlist-item-' . $row_index,
-        '#remove_wishlist_item' => TRUE,
+        '#move_wishlist_item' => TRUE,
         '#row_index' => $row_index,
         '#attributes' => ['class' => ['move-wishlist-item']],
       ];
@@ -159,7 +159,7 @@ class MoveToCart extends FieldPluginBase {
    */
   public function viewsFormSubmit(&$form, FormStateInterface $form_state) {
     $triggering_element = $form_state->getTriggeringElement();
-    if (!empty($triggering_element['#remove_wishlist_item'])) {
+    if (!empty($triggering_element['#move_wishlist_item'])) {
       $row_index = $triggering_element['#row_index'];
       /** @var \Drupal\commerce_wishlist\Entity\WishlistItemInterface $wishlist_item */
       $wishlist_item = $this->getEntity($this->view->result[$row_index]);
