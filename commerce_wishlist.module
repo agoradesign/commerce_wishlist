@@ -103,9 +103,6 @@ function commerce_wishlist_theme($existing, $type, $theme, $path) {
       'base hook' => 'commerce_wishlist',
       'render element' => 'elements',
     ],
-    'commerce_wishlist_edit_form' => [
-      'render element' => 'form',
-    ],
   ];
 }
 

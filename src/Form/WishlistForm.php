@@ -54,8 +54,6 @@ class WishlistForm extends ContentEntityForm {
     $form = parent::form($form, $form_state);
 
     $form['#tree'] = TRUE;
-    $form['#theme'] = 'commerce_wishlist_edit_form';
-    $form['#attached']['library'][] = 'commerce_wishlist/form';
     // Changed must be sent to the client, for later overwrite error checking.
     $form['changed'] = [
       '#type' => 'hidden',
