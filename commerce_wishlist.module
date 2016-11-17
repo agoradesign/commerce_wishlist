@@ -17,35 +17,6 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 
 /**
- * Implements hook_entity_bundle_create().
- *
- * Creates an 'add_to_wishlist' form display for each new wishlist item type.
- */
-function commerce_wishlist_entity_bundle_create($entity_type_id, $bundle) {
-  if ($entity_type_id == 'commerce_wishlist_item' && !\Drupal::isConfigSyncing()) {
-    $storage = \Drupal::entityTypeManager()->getStorage('entity_form_display');
-    $form_display = $storage->load('commerce_wishlist_item.' . $bundle . '.add_to_wishlist');
-    if (!$form_display) {
-      /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
-      $form_display = $storage->create([
-        'targetEntityType' => 'commerce_wishlist_item',
-        'bundle' => $bundle,
-        'mode' => 'add_to_wishlist',
-        'status' => TRUE,
-      ]);
-      $form_display->save();
-    }
-  }
-}
-
-/**
- * Implements hook_entity_type_build().
- */
-function commerce_wishlist_entity_type_build(array &$entity_types) {
-  $entity_types['commerce_wishlist_item']->setFormClass('add_to_wishlist', '\Drupal\commerce_wishlist\Form\AddToWishlistForm');
-}
-
-/**
  * Implements hook_user_login().
  */
 function commerce_wishlist_user_login($account) {
@@ -70,25 +41,6 @@ function commerce_wishlist_commerce_wishlist_delete(WishlistInterface $wishlist)
   /** @var \Drupal\commerce_wishlist\WishlistSessionInterface $wishlist_session */
   $wishlist_session = \Drupal::service('commerce_wishlist.wishlist_session');
   $wishlist_session->deleteWishlistId($wishlist->id());
-}
-
-/**
- * Implements hook_form_FORM_ID_alter() for 'entity_form_display_edit_form'.
- *
- * Hides irrelevant purchasable_entity widgets on the add_to_wishlist wishlist
- * item form display.
- *
- * @todo: Unnecessary for wishlist, but part of the scaffolding effort for now. Is it unnecessary? check that...
- */
-function commerce_wishlist_form_entity_form_display_edit_form_alter(array &$form, FormStateInterface $form_state) {
-  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $entity */
-  $entity = $form_state->getFormObject()->getEntity();
-  if ($form['#entity_type'] == 'commerce_wishlist_item' && $entity->getMode() == 'add_to_wishlist') {
-    $options = &$form['fields']['purchasable_entity']['plugin']['type']['#options'];
-    unset($options['entity_reference_autocomplete_tags']);
-    unset($options['entity_reference_autocomplete']);
-    unset($options['inline_entity_form_complex']);
-  }
 }
 
 /**
@@ -352,12 +304,12 @@ function commerce_wishlist_form_commerce_order_item_add_to_cart_form_alter(&$for
   if (!empty($settings['show_wishlist'])) {
     $label = $settings['label_wishlist'] ?: t('Add to wishlist');
     $weight = ($settings['weight_wishlist'] != "") ? $settings['weight_wishlist'] : 99;
-    $form['actions']['wishlist'] = array(
+    $form['actions']['wishlist'] = [
       '#type' => 'submit',
       '#value' => $label,
       '#weight' => $weight,
-      '#submit' => array('commerce_wishlist_add_to_wishlist_form_submit'),
-    );
+      '#submit' => ['commerce_wishlist_add_to_wishlist_form_submit'],
+    ];
   }
 }
 
