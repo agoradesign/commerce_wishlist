@@ -19,16 +19,12 @@ class WishlistTypeForm extends BundleEntityFormBase {
     /** @var \Drupal\commerce_wishlist\Entity\WishlistTypeInterface $wishlist_type */
     $wishlist_type = $this->entity;
 
-    // Prepare a list of views tagged 'commerce_wishlist_form' and one of 'commerce_wishlist_block'.
+    // Prepare a list of views tagged 'commerce_wishlist_form'.
     $view_storage = \Drupal::entityTypeManager()->getStorage('view');
     $available_form_views = [];
-    $available_block_views = [];
     foreach ($view_storage->loadMultiple() as $view) {
       if (strpos($view->get('tag'), 'commerce_wishlist_form') !== FALSE) {
         $available_form_views[$view->id()] = $view->label();
-      }
-      elseif (strpos($view->get('tag'), 'commerce_wishlist_block') !== FALSE) {
-        $available_block_views[$view->id()] = $view->label();
       }
     }
 
@@ -70,12 +66,6 @@ class WishlistTypeForm extends BundleEntityFormBase {
       '#title' => $this->t('Wishlist form view'),
       '#default_value' => $wishlist_type->getWishlistFormView(),
       '#options' => $available_form_views,
-    ];
-    $form['wishlistBlockView'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Wishlist block view'),
-      '#default_value' => $wishlist_type->getWishlistBlockView(),
-      '#options' => $available_block_views,
     ];
 
     return $this->protectBundleIdElement($form);

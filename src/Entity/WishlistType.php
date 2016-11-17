@@ -41,8 +41,7 @@ use Drupal\Core\Config\Entity\ConfigEntityBundleBase;
  *     "allowAnonymous",
  *     "allowMultiple",
  *     "allowPublic",
- *     "wishlistFormView",
- *     "wishlistBlockView"
+ *     "wishlistFormView"
  *   },
  *   links = {
  *     "add-form" = "/admin/commerce/config/wishlist-types/add",
@@ -96,13 +95,6 @@ class WishlistType extends ConfigEntityBundleBase implements WishlistTypeInterfa
    * @var string
    */
   protected $wishlistFormView;
-
-  /**
-   * The Views ID of the wishlist block view to use.
-   *
-   * @var string
-   */
-  protected $wishlistBlockView;
 
   /**
    * @inheritDoc
@@ -161,21 +153,6 @@ class WishlistType extends ConfigEntityBundleBase implements WishlistTypeInterfa
    */
   public function setWishlistFormView($wishlist_form_view) {
     $this->wishlistFormView = $wishlist_form_view;
-    return $this;
-  }
-
-  /**
-   * @inheritDoc
-   */
-  public function getWishlistBlockView() {
-    return $this->wishlistBlockView;
-  }
-
-  /**
-   * @inheritDoc
-   */
-  public function setWishlistBlockView($wishlist_block_view) {
-    $this->wishlistBlockView = $wishlist_block_view;
     return $this;
   }
 

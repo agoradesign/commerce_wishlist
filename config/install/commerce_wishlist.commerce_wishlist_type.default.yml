@@ -6,4 +6,3 @@ allowAnonymous: false
 allowMultiple: true
 allowPublic: true
 wishlistFormView: commerce_wishlist_form
-wishlistBlockView: commerce_wishlist_block

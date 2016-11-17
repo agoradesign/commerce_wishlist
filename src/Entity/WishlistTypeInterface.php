@@ -84,22 +84,4 @@ interface WishlistTypeInterface extends ConfigEntityInterface {
    */
   public function setWishlistFormView($wishlist_form_view);
 
-  /**
-   * Gets the Views ID of the wishlist block view to use.
-   *
-   * @return string
-   *   The Views ID of the wishlist block view to use.
-   */
-  public function getWishlistBlockView();
-
-  /**
-   * Sets the Views ID of the wishlist block view to use.
-   *
-   * @param string $wishlist_block_view
-   *   The Views ID of the wishlist block view to use.
-   *
-   * @return $this
-   */
-  public function setWishlistBlockView($wishlist_block_view);
-
 }

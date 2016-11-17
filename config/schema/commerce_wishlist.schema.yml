@@ -20,9 +20,6 @@ commerce_wishlist.commerce_wishlist_type.*:
     wishlistFormView:
       type: string
       label: 'Wishlist form view'
-    wishlistBlockView:
-      type: string
-      label: 'Wishlist block view'
 
 commerce_wishlist.commerce_wishlist_item_type.*:
   type: config_entity

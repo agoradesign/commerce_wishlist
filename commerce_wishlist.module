@@ -106,16 +106,6 @@ function commerce_wishlist_theme($existing, $type, $theme, $path) {
     'commerce_wishlist_edit_form' => [
       'render element' => 'form',
     ],
-    'commerce_wishlist_block' => [
-      'variables' => [
-        'icon' => NULL,
-        'count' => NULL,
-        'count_text' => '',
-        'content' => NULL,
-        'url' => NULL,
-        'links' => [],
-      ],
-    ],
   ];
 }
 
@@ -163,13 +153,6 @@ function template_preprocess_commerce_wishlist(&$variables) {
   foreach (Element::children($variables['elements']) as $key) {
     $variables['wishlist'][$key] = $variables['elements'][$key];
   }
-}
-
-/**
- * Prepares variables for the wishlist block element template.
- */
-function template_preprocess_commerce_wishlist_block(&$variables) {
-  $variables['attributes']['class'][] = 'wishlist--wishlist-block';
 }
 
 /**
