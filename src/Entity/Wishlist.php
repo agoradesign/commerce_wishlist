@@ -2,7 +2,6 @@
 
 namespace Drupal\commerce_wishlist\Entity;
 
-use Drupal\commerce_store\Entity\StoreInterface;
 use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
@@ -78,36 +77,6 @@ class Wishlist extends ContentEntityBase implements WishlistInterface {
    */
   public function setName($name) {
     $this->set('name', $name);
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStore() {
-    return $this->get('store_id')->entity;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setStore(StoreInterface $store) {
-    $this->set('store_id', $store->id());
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStoreId() {
-    return $this->get('store_id')->target_id;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setStoreId($store_id) {
-    $this->set('store_id', $store_id);
     return $this;
   }
 
@@ -300,17 +269,6 @@ class Wishlist extends ContentEntityBase implements WishlistInterface {
       ->setRequired(TRUE)
       ->setDefaultValue('')
       ->setSetting('max_length', 255)
-      ->setDisplayConfigurable('form', TRUE)
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['store_id'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Store'))
-      ->setDescription(t('The store to which the wishlist belongs.'))
-      ->setCardinality(1)
-      ->setRequired(TRUE)
-      ->setSetting('target_type', 'commerce_store')
-      ->setSetting('handler', 'default')
-      ->setTranslatable(TRUE)
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayConfigurable('view', TRUE);
 

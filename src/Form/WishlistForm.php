@@ -85,13 +85,6 @@ class WishlistForm extends ContentEntityForm {
       '#weight' => 91,
     ];
 
-    // Show the wishlist's store only if there are multiple available.
-    $store_query = $this->entityManager->getStorage('commerce_store')->getQuery();
-    $store_count = $store_query->count()->execute();
-    if ($store_count > 1) {
-      $store_link = $wishlist->getStore()->toLink()->toString();
-      $form['meta']['store'] = $this->fieldAsReadOnly($this->t('Store'), $store_link);
-    }
     // Move uid/mail widgets to the sidebar, or provide read-only alternatives.
     if (isset($form['uid'])) {
       $form['uid']['#group'] = 'customer';

@@ -21,4 +21,3 @@ content:
     label: hidden
 hidden:
   shipping_profile: true
-  store_id: true

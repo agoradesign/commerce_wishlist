@@ -176,8 +176,6 @@ function commerce_wishlist_add_wishlist_items_field($wishlist_type) {
  * Implements hook_views_data_alter().
  */
 function commerce_wishlist_views_data_alter(array &$data) {
-  $data['commerce_wishlist']['store_id']['field']['id'] = 'commerce_store';
-
   $data['commerce_wishlist_item']['edit_quantity']['field'] = [
     'title' => t('Wishlist quantity text field'),
     'help' => t('Adds a text field for editing the quantity.'),
@@ -340,8 +338,6 @@ function commerce_wishlist_add_to_wishlist_form_submit($form, FormStateInterface
   $wishlist_provider = \Drupal::service('commerce_wishlist.wishlist_provider');
   /** @var \Drupal\commerce_wishlist\Resolver\WishlistTypeResolverInterface $wishlist_type_resolver */
   $wishlist_type_resolver = \Drupal::service('commerce_wishlist.chain_wishlist_type_resolver');
-  /** @var \Drupal\commerce_store\StoreContext $store_context */
-  $store_context = \Drupal::service('commerce_store.store_context');
 
   // Create the wishlist item.
   $wishlist_item = $wishlist_manager->createWishlistItem($purchasable_entity, $order_item->getQuantity());
@@ -349,23 +345,10 @@ function commerce_wishlist_add_to_wishlist_form_submit($form, FormStateInterface
   // Determine the wishlist type to use.
   $wishlist_type = $wishlist_type_resolver->resolve($wishlist_item);
 
-  // Select the store.
-  $stores = $purchasable_entity->getStores();
-  if (count($stores) === 1) {
-    $store = reset($stores);
-  }
-  else {
-    $store = $store_context->getStore();
-    if (!in_array($store, $stores)) {
-      // Indicates that the site listings are not filtered properly.
-      throw new \Exception("The given entity can't be purchased from the current store.");
-    }
-  }
-
   // Use existing or create a new wishlist.
-  $wishlist = $wishlist_provider->getWishlist($wishlist_type, $store);
+  $wishlist = $wishlist_provider->getWishlist($wishlist_type);
   if (!$wishlist) {
-    $wishlist = $wishlist_provider->createWishlist($wishlist_type, $store);
+    $wishlist = $wishlist_provider->createWishlist($wishlist_type);
   }
   $wishlist_manager->addWishlistItem($wishlist, $wishlist_item, $form_state->get(['settings', 'combine']));
 

@@ -5,7 +5,6 @@ namespace Drupal\Tests\commerce_wishlist\Kernel\Entity;
 use Drupal\commerce_wishlist\Entity\Wishlist;
 use Drupal\commerce_wishlist\Entity\WishlistItem;
 use Drupal\commerce_wishlist\Entity\WishlistItemType;
-use Drupal\commerce_store\Entity\Store;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\profile\Entity\Profile;
 
@@ -24,13 +23,6 @@ class WishlistTest extends EntityKernelTestBase {
    * @var \Drupal\user\UserInterface
    */
   protected $user;
-
-  /**
-   * A sample store.
-   *
-   * @var \Drupal\commerce_store\Entity\StoreInterface
-   */
-  protected $store;
 
   /**
    * Modules to enable.
@@ -62,10 +54,8 @@ class WishlistTest extends EntityKernelTestBase {
     parent::setUp();
 
     $this->installEntitySchema('profile');
-    $this->installEntitySchema('commerce_store');
     $this->installEntitySchema('commerce_wishlist');
     $this->installEntitySchema('commerce_wishlist_item');
-    $this->installConfig('commerce_store');
     $this->installConfig('commerce_wishlist');
 
     // An wishlist item type that doesn't need a purchasable entity, for simplicity.
@@ -77,14 +67,6 @@ class WishlistTest extends EntityKernelTestBase {
 
     $user = $this->createUser();
     $this->user = $this->reloadEntity($user);
-
-    $store = Store::create([
-      'type' => 'default',
-      'name' => 'Sample store',
-      'default_currency' => 'EUR',
-    ]);
-    $store->save();
-    $this->store = $this->reloadEntity($store);
   }
 
   /**
@@ -92,10 +74,6 @@ class WishlistTest extends EntityKernelTestBase {
    *
    * @covers ::getName
    * @covers ::setName
-   * @covers ::getStore
-   * @covers ::setStore
-   * @covers ::getStoreId
-   * @covers ::setStoreId
    * @covers ::getCustomer
    * @covers ::setCustomer
    * @covers ::getCustomerId
@@ -140,15 +118,6 @@ class WishlistTest extends EntityKernelTestBase {
 
     $wishlist->setName('My wishlist');
     $this->assertEquals('My wishlist', $wishlist->getName());
-
-    $wishlist->setStore($this->store);
-    $this->assertEquals($this->store, $wishlist->getStore());
-    $this->assertEquals($this->store->id(), $wishlist->getStoreId());
-    $wishlist->setStoreId(0);
-    $this->assertEquals(NULL, $wishlist->getStore());
-    $wishlist->setStoreId([$this->store->id()]);
-    $this->assertEquals($this->store, $wishlist->getStore());
-    $this->assertEquals($this->store->id(), $wishlist->getStoreId());
 
     $wishlist->setCustomer($this->user);
     $this->assertEquals($this->user, $wishlist->getCustomer());

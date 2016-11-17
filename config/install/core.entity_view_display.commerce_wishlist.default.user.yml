@@ -33,12 +33,5 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
-  store_id:
-    type: entity_reference_label
-    weight: 0
-    label: inline
-    settings:
-      link: false
-    third_party_settings: {  }
 hidden:
   uid: true

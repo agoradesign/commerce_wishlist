@@ -3,7 +3,6 @@
 namespace Drupal\commerce_wishlist;
 
 use Drupal\commerce_wishlist\Exception\DuplicateWishlistException;
-use Drupal\commerce_store\Entity\StoreInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Session\AccountInterface;
 
@@ -38,12 +37,11 @@ class WishlistProvider implements WishlistProviderInterface {
    *
    * Each data item is an array with the following keys:
    * - type: The wishlist type.
-   * - store_id: The store ID.
    *
    * Example:
    * @code
    * 1 => [
-   *   10 => ['type' => 'default', 'store_id' => '1'],
+   *   10 => ['type' => 'default'],
    * ]
    * @endcode
    *
@@ -70,20 +68,18 @@ class WishlistProvider implements WishlistProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function createWishlist($wishlist_type, StoreInterface $store, AccountInterface $account = NULL, $name = NULL) {
+  public function createWishlist($wishlist_type, AccountInterface $account = NULL, $name = NULL) {
     $account = $account ?: $this->currentUser;
     $uid = $account->id();
-    $store_id = $store->id();
     // @todo Remove this limitation for bundles allowing multiple wishlists.
-    if ($this->getWishlistId($wishlist_type, $store, $account)) {
+    if ($this->getWishlistId($wishlist_type, $account)) {
       // Don't allow multiple wishlist entities matching the same criteria.
-      throw new DuplicateWishlistException("A wishlist for type '$wishlist_type', store '$store_id' and account '$uid' already exists.");
+      throw new DuplicateWishlistException("A wishlist for type '$wishlist_type' and account '$uid' already exists.");
     }
 
     // Create the new wishlist entity.
     $wishlist = $this->wishlistStorage->create([
       'type' => $wishlist_type,
-      'store_id' => $store_id,
       'uid' => $uid,
       'name' => $name ?: t('Wishlist'),
       // @todo By now, we only support one wishlist per user, so we automatically set it as the default one. In the long run we may need to distinct here.
@@ -99,7 +95,6 @@ class WishlistProvider implements WishlistProviderInterface {
     if (isset($this->wishlistData[$uid])) {
       $this->wishlistData[$uid][$wishlist->id()] = [
         'type' => $wishlist_type,
-        'store_id' => $store_id,
       ];
     }
 
@@ -109,9 +104,9 @@ class WishlistProvider implements WishlistProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWishlist($wishlist_type, StoreInterface $store, AccountInterface $account = NULL) {
+  public function getWishlist($wishlist_type, AccountInterface $account = NULL) {
     $wishlist = NULL;
-    $wishlist_id = $this->getWishlistId($wishlist_type, $store, $account);
+    $wishlist_id = $this->getWishlistId($wishlist_type, $account);
     if ($wishlist_id) {
       $wishlist = $this->wishlistStorage->load($wishlist_id);
     }
@@ -122,13 +117,12 @@ class WishlistProvider implements WishlistProviderInterface {
   /**
    * {@inheritdoc}
    */
-  public function getWishlistId($wishlist_type, StoreInterface $store, AccountInterface $account = NULL) {
+  public function getWishlistId($wishlist_type, AccountInterface $account = NULL) {
     $wishlist_id = NULL;
     $wishlist_data = $this->loadWishlistData($account);
     if ($wishlist_data) {
       $search = [
         'type' => $wishlist_type,
-        'store_id' => $store->id(),
       ];
       $wishlist_id = array_search($search, $wishlist_data);
     }
@@ -201,7 +195,6 @@ class WishlistProvider implements WishlistProviderInterface {
 
       $this->wishlistData[$uid][$wishlist->id()] = [
         'type' => $wishlist->bundle(),
-        'store_id' => $wishlist->getStoreId(),
       ];
     }
 

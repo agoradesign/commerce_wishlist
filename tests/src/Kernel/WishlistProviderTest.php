@@ -2,8 +2,6 @@
 
 namespace Drupal\Tests\commerce_wishlist\Kernel;
 
-use Drupal\commerce_store\Entity\Store;
-use Drupal\commerce_store\Entity\StoreType;
 use Drupal\commerce_wishlist\Entity\WishlistInterface;
 use Drupal\commerce_wishlist\Entity\WishlistItemType;
 use Drupal\commerce_wishlist\Exception\DuplicateWishlistException;
@@ -40,13 +38,6 @@ class WishlistProviderTest extends EntityKernelTestBase {
   ];
 
   /**
-   * The store.
-   *
-   * @var \Drupal\commerce_store\Entity\StoreInterface
-   */
-  protected $store;
-
-  /**
    * Anonymous user.
    *
    * @var \Drupal\user\UserInterface
@@ -81,7 +72,6 @@ class WishlistProviderTest extends EntityKernelTestBase {
     parent::setUp();
     $this->installSchema('system', 'router');
     $this->installEntitySchema('profile');
-    $this->installEntitySchema('commerce_store');
     $this->installEntitySchema('commerce_wishlist');
     $this->installEntitySchema('commerce_wishlist_item');
     $this->installConfig(['commerce_wishlist']);
@@ -91,14 +81,6 @@ class WishlistProviderTest extends EntityKernelTestBase {
       'label' => 'Test',
       'wishlistType' => 'default',
     ])->save();
-
-    StoreType::create(['id' => 'animals', 'label' => 'Animals']);
-    $store = Store::create([
-      'type' => 'animals',
-      'name' => 'Llamas and more',
-    ]);
-    $store->save();
-    $this->store = $this->reloadEntity($store);
 
     $this->anonymousUser = $this->createUser([
       'uid' => 0,
@@ -119,12 +101,12 @@ class WishlistProviderTest extends EntityKernelTestBase {
    */
   public function testCreateAnonymousWishlist() {
     $wishlist_type = 'default';
-    $wishlist = $this->wishlistProvider->createWishlist($wishlist_type, $this->store, $this->anonymousUser);
+    $wishlist = $this->wishlistProvider->createWishlist($wishlist_type, $this->anonymousUser);
     $this->assertInstanceOf(WishlistInterface::class, $wishlist);
 
     // Trying to recreate the same wishlist should throw an exception.
     $this->setExpectedException(DuplicateWishlistException::class);
-    $this->wishlistProvider->createWishlist($wishlist_type, $this->store, $this->anonymousUser);
+    $this->wishlistProvider->createWishlist($wishlist_type, $this->anonymousUser);
   }
 
   /**
@@ -136,11 +118,11 @@ class WishlistProviderTest extends EntityKernelTestBase {
    * @covers ::getWishlistIds
    */
   public function testGetAnonymousWishlist() {
-    $this->wishlistProvider->createWishlist('default', $this->store, $this->anonymousUser);
-    $wishlist = $this->wishlistProvider->getWishlist('default', $this->store, $this->anonymousUser);
+    $this->wishlistProvider->createWishlist('default', $this->anonymousUser);
+    $wishlist = $this->wishlistProvider->getWishlist('default', $this->anonymousUser);
     $this->assertInstanceOf(WishlistInterface::class, $wishlist);
 
-    $wishlist_id = $this->wishlistProvider->getWishlistId('default', $this->store, $this->anonymousUser);
+    $wishlist_id = $this->wishlistProvider->getWishlistId('default', $this->anonymousUser);
     $this->assertEquals(1, $wishlist_id);
 
     $wishlists = $this->wishlistProvider->getWishlists($this->anonymousUser);
@@ -156,12 +138,12 @@ class WishlistProviderTest extends EntityKernelTestBase {
    * @covers ::createWishlist
    */
   public function testCreateAuthenticatedWishlist() {
-    $wishlist = $this->wishlistProvider->createWishlist('default', $this->store, $this->authenticatedUser);
+    $wishlist = $this->wishlistProvider->createWishlist('default', $this->authenticatedUser);
     $this->assertInstanceOf(WishlistInterface::class, $wishlist);
 
     // Trying to recreate the same wishlist should throw an exception.
     $this->setExpectedException(DuplicateWishlistException::class);
-    $this->wishlistProvider->createWishlist('default', $this->store, $this->authenticatedUser);
+    $this->wishlistProvider->createWishlist('default', $this->authenticatedUser);
   }
 
   /**
@@ -173,12 +155,12 @@ class WishlistProviderTest extends EntityKernelTestBase {
    * @covers ::getWishlistIds
    */
   public function testGetAuthenticatedWishlist() {
-    $this->wishlistProvider->createWishlist('default', $this->store, $this->authenticatedUser);
+    $this->wishlistProvider->createWishlist('default', $this->authenticatedUser);
 
-    $wishlist = $this->wishlistProvider->getWishlist('default', $this->store, $this->authenticatedUser);
+    $wishlist = $this->wishlistProvider->getWishlist('default', $this->authenticatedUser);
     $this->assertInstanceOf(WishlistInterface::class, $wishlist);
 
-    $wishlist_id = $this->wishlistProvider->getWishlistId('default', $this->store, $this->authenticatedUser);
+    $wishlist_id = $this->wishlistProvider->getWishlistId('default', $this->authenticatedUser);
     $this->assertEquals(1, $wishlist_id);
 
     $wishlists = $this->wishlistProvider->getWishlists($this->authenticatedUser);

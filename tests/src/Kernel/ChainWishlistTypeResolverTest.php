@@ -48,7 +48,6 @@ class ChainWishlistTypeResolverTest extends KernelTestBase {
     $this->installSchema('system', 'router');
     $this->installEntitySchema('user');
     $this->installEntitySchema('profile');
-    $this->installEntitySchema('commerce_store');
     $this->installEntitySchema('commerce_wishlist');
     $this->installEntitySchema('commerce_wishlist_item');
     $this->installConfig('commerce_wishlist');

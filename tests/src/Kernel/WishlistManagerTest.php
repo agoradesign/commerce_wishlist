@@ -4,8 +4,6 @@ namespace Drupal\Tests\commerce_wishlist\Kernel;
 
 use Drupal\commerce_product\Entity\ProductVariation;
 use Drupal\commerce_product\Entity\ProductVariationType;
-use Drupal\commerce_store\Entity\Store;
-use Drupal\commerce_store\Entity\StoreType;
 use Drupal\commerce_wishlist\Entity\Wishlist;
 use Drupal\commerce_wishlist\Entity\WishlistItemInterface;
 use Drupal\commerce_wishlist\Entity\WishlistItemType;
@@ -42,13 +40,6 @@ class WishlistManagerTest extends EntityKernelTestBase {
     'commerce_store',
     'commerce_wishlist',
   ];
-
-  /**
-   * The store.
-   *
-   * @var \Drupal\commerce_store\Entity\StoreInterface
-   */
-  protected $store;
 
   /**
    * Anonymous user.
@@ -92,7 +83,6 @@ class WishlistManagerTest extends EntityKernelTestBase {
     parent::setUp();
     $this->installSchema('system', 'router');
     $this->installEntitySchema('profile');
-    $this->installEntitySchema('commerce_store');
     $this->installEntitySchema('commerce_product_variation');
     $this->installEntitySchema('commerce_wishlist_item');
     $this->installEntitySchema('commerce_wishlist');
@@ -110,14 +100,6 @@ class WishlistManagerTest extends EntityKernelTestBase {
     ]);
     $wishlist_type->save();
     commerce_wishlist_add_wishlist_items_field($wishlist_type);
-
-    StoreType::create(['id' => 'animals', 'label' => 'Animals']);
-    $store = Store::create([
-      'type' => 'animals',
-      'name' => 'Llamas and more',
-    ]);
-    $store->save();
-    $this->store = $this->reloadEntity($store);
 
     ProductVariationType::create([
       'id' => 'test',

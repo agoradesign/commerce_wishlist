@@ -37,5 +37,4 @@ content:
 hidden:
   created: true
   is_default: true
-  store_id: true
   uid: true

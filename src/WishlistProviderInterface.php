@@ -2,7 +2,6 @@
 
 namespace Drupal\commerce_wishlist;
 
-use Drupal\commerce_store\Entity\StoreInterface;
 use Drupal\Core\Session\AccountInterface;
 
 /**
@@ -13,12 +12,10 @@ use Drupal\Core\Session\AccountInterface;
 interface WishlistProviderInterface {
 
   /**
-   * Creates a wishlist entity for the given store and user.
+   * Creates a wishlist entity for the given user.
    *
    * @param string $wishlist_type
    *   The wishlist type ID.
-   * @param \Drupal\commerce_store\Entity\StoreInterface $store
-   *   The store.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user. If empty, the current user is assumed.
    * @param string $name
@@ -30,37 +27,33 @@ interface WishlistProviderInterface {
    * @throws \Drupal\commerce_wishlist\Exception\DuplicateWishlistException
    *   When a wishlist with the given criteria already exists.
    */
-  public function createWishlist($wishlist_type, StoreInterface $store, AccountInterface $account = NULL, $name = NULL);
+  public function createWishlist($wishlist_type, AccountInterface $account = NULL, $name = NULL);
 
   /**
-   * Gets the wishlist entity for the given store and user.
+   * Gets the wishlist entity for the given user.
    *
    * @param string $wishlist_type
    *   The wishlist type ID.
-   * @param \Drupal\commerce_store\Entity\StoreInterface $store
-   *   The store.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user. If empty, the current user is assumed.
    *
    * @return \Drupal\commerce_wishlist\Entity\WishlistInterface|null
    *   The wishlist entity, or NULL if none found.
    */
-  public function getWishlist($wishlist_type, StoreInterface $store, AccountInterface $account = NULL);
+  public function getWishlist($wishlist_type, AccountInterface $account = NULL);
 
   /**
-   * Gets the wishlist entity ID for the given store and user.
+   * Gets the wishlist entity ID for the given user.
    *
    * @param string $wishlist_type
    *   The wishlist type ID.
-   * @param \Drupal\commerce_store\Entity\StoreInterface $store
-   *   The store.
    * @param \Drupal\Core\Session\AccountInterface $account
    *   The user. If empty, the current user is assumed.
    *
    * @return int|null
    *   The wishlist entity ID, or NULL if none found.
    */
-  public function getWishlistId($wishlist_type, StoreInterface $store, AccountInterface $account = NULL);
+  public function getWishlistId($wishlist_type, AccountInterface $account = NULL);
 
   /**
    * Gets all wishlist entities for the given user.
