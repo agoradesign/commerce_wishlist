@@ -6,7 +6,7 @@ use Drupal\commerce\PurchasableEntityInterface;
 use Drupal\commerce_cart\CartManagerInterface;
 use Drupal\commerce_cart\CartProviderInterface;
 use Drupal\commerce_order\Resolver\OrderTypeResolverInterface;
-use Drupal\commerce_store\StoreContextInterface;
+use Drupal\commerce_store\CurrentStoreInterface;
 use Drupal\commerce_wishlist\WishlistManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Link;
@@ -46,11 +46,11 @@ class MoveToCart extends FieldPluginBase {
   protected $orderTypeResolver;
 
   /**
-   * The store context.
+   * The current store.
    *
-   * @var \Drupal\commerce_store\StoreContextInterface
+   * @var \Drupal\commerce_store\CurrentStoreInterface
    */
-  protected $storeContext;
+  protected $currentStore;
 
   /**
    * The wishlist manager.
@@ -76,17 +76,17 @@ class MoveToCart extends FieldPluginBase {
    *   The cart provider.
    * @param \Drupal\commerce_order\Resolver\OrderTypeResolverInterface $order_type_resolver
    *   The order type resolver.
-   * @param \Drupal\commerce_store\StoreContextInterface $store_context
-   *   The store context.
+   * @param \Drupal\commerce_store\CurrentStoreInterface $current_store
+   *   The current store.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, WishlistManagerInterface $wishlist_manager, CartManagerInterface $cart_manager, CartProviderInterface $cart_provider, OrderTypeResolverInterface $order_type_resolver, StoreContextInterface $store_context) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, WishlistManagerInterface $wishlist_manager, CartManagerInterface $cart_manager, CartProviderInterface $cart_provider, OrderTypeResolverInterface $order_type_resolver, CurrentStoreInterface $current_store) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->wishlistManager = $wishlist_manager;
     $this->cartManager = $cart_manager;
     $this->cartProvider = $cart_provider;
     $this->orderTypeResolver = $order_type_resolver;
-    $this->storeContext = $store_context;
+    $this->currentStore = $current_store;
   }
 
   /**
@@ -101,7 +101,7 @@ class MoveToCart extends FieldPluginBase {
       $container->get('commerce_cart.cart_manager'),
       $container->get('commerce_cart.cart_provider'),
       $container->get('commerce_order.chain_order_type_resolver'),
-      $container->get('commerce_store.store_context')
+      $container->get('commerce_store.current_store')
     );
   }
 
