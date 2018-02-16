@@ -38,12 +38,6 @@ use Drupal\Core\Field\BaseFieldDefinition;
  *     "bundle" = "type",
  *     "label" = "title",
  *   },
- *   links = {
- *     "canonical" = "/admin/commerce/config/wishlist-item/{commerce_wishlist_item}",
- *     "edit-form" = "/admin/commerce/config/wishlist-item/{commerce_wishlist_item}/edit",
- *     "delete-form" = "/admin/commerce/config/wishlist-item/{commerce_wishlist_item}/delete",
- *     "collection" = "/admin/commerce/config/wishlist-item"
- *   },
  *   bundle_entity_type = "commerce_wishlist_item_type",
  *   field_ui_base_route = "entity.commerce_wishlist_item_type.edit_form",
  * )
