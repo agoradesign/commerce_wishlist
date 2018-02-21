@@ -290,6 +290,10 @@ function commerce_wishlist_field_formatter_settings_summary_alter(&$summary, $co
 function commerce_wishlist_form_commerce_order_item_add_to_cart_form_alter(&$form, FormStateInterface $form_state, $form_id) {
   // The product entity is thankfully available in the form storage.
   $form_data = $form_state->getStorage();
+  if (empty($form_data['product'])) {
+    // @todo support other entities than commerce_product (e.g. commerce_product_bundle).
+    return;
+  }
   /** @var \Drupal\commerce_product\Entity\ProductInterface $product */
   $product = $form_data['product'];
 
